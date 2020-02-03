@@ -1,6 +1,66 @@
 <!DOCTYPE html>
+<html lang ="en">
+<head>
+  <meta charset = "utf-8"/>
+</head>
+
+<body>
+  <div id="container">
+    <button id="rock">Rock</button>
+    <button id="paper">Paper</button>
+    <button id="scissors">Scissors</button>
+  </div>
+
+</body>
 
 <script>
+  var round = 0;
+  var playerScore = 0;
+  var computerScore = 0;
+
+  const buttons = document.querySelectorAll('button');
+  buttons.forEach((button) => {
+    button.addEventListener('click' , (e) => {
+      var computerSelection = getComputerSelection();
+      var playerSelection = button.id;
+      var roundOutcome = playRound(playerSelection, computerSelection);
+      const content = document.createElement('div');
+      content.classList.add('content');
+      content.textContent = `You threw ${playerSelection}. ` + `Computer threw ${computerSelection}. ` + roundOutcome.text;
+
+      container.appendChild(content);
+
+      roundUp();
+
+    });
+  });
+
+  function roundUp() {
+    if((round > 3) && (playerScore > computerScore)) {
+      alert(`Good game! Player scored ${playerScore}. Computer scored ${computerScore}. Player wins!`);
+      removeContent('content');
+    } else if((round > 3) && (playerScore < computerScore)) {
+      alert(`Good game! Player scored ${playerScore}. Computer scored ${computerScore}. Computer wins!`);
+      removeContent('content');
+    } else if((round > 3) && (playerScore === computerScore)) {
+      alert(`Good game! Player scored ${playerScore}. Computer scored ${computerScore}. It's a tie!`);
+      removeContent('content');
+    } else {
+      round += 1;
+    }
+    console.log(round);
+  }
+
+  function removeContent(className){
+    var elements = document.getElementsByClassName(className);
+    while(elements.length > 0){
+        elements[0].parentNode.removeChild(elements[0]);
+    }
+    round = 0;
+    playerScore = 0;
+    computerScore = 0;
+  }
+
 // Player selects paper, rock, or scissors
   const getPlayerSelection = playerInput => {
     playerInput = playerInput.toLowerCase();
@@ -39,27 +99,47 @@
 //take playerSelection and computerSelection to determine round winner.
   function playRound(playerSelection, computerSelection) {
     if (computerSelection === playerSelection) {
-      return "This match was a tie.";
+      return {
+        text: "This match was a tie."
+      }
 
     } else if (playerSelection === "rock") {
       if (computerSelection === "paper") {
-        return "Paper beats rock. Computer Wins!";
+        return {
+          text: "Paper beats rock. Computer Wins!",
+          score: computerScore += 1,
+        };
       } else {
-        return "Rock beats scissors. Player wins!";
+        return {
+          text: "Rock beats scissors. Player wins!",
+          score: playerScore += 1,
+        };
       }
 
     } else if (playerSelection === "paper") {
       if (computerSelection === "scissors") {
-        return "Scissors beats paper. Computer Wins!";
+        return {
+          text: "Scissors beats paper. Computer Wins!",
+          score: computerScore += 1,
+        };
       } else {
-        return "Paper beats rock. Player wins!";
+        return {
+          text: "Paper beats rock. Player wins!",
+          score: playerScore += 1,
+        };
       }
 
     } else if (playerSelection === "scissors") {
       if (computerSelection === "rock") {
-        return "Rock beats scissors. Computer Wins!";
+        return {
+          text: "Rock beats scissors. Computer Wins!",
+          score: computerScore += 1,
+        };
       } else {
-        return "Scissors beat paper. Player wins!";
+        return {
+          text: "Scissors beat paper. Player wins!",
+          score: playerScore += 1,
+        };
       }
 
     } else {
@@ -70,16 +150,20 @@
 //call playGame to run game inside the console.
   function playGame() {
     var playerSelection = getPlayerSelection(prompt("YOU READY FOR THIS? ROCK, PAPER, SCISSORS?!"));
-
-//loops the game 5 times with different computer selections.
-    var i = 0;
-    for (i; i < 5; i++) {
-      var computerSelection = getComputerSelection();
-      var roundOutcome = playRound(playerSelection, computerSelection);
-
-//display the outcome in the console.
-      console.log(`You threw ${playerSelection}. ` + `Computer threw ${computerSelection}. ` + roundOutcome);
-    }
+    var computerSelection = getComputerSelection();
+    var roundOutcome = playRound(playerSelection, computerSelection);
+    console.log(`You threw ${playerSelection}. ` + `Computer threw ${computerSelection}. ` + roundOutcome.text);
   }
+// //loops the game 5 times with different computer selections.
+//     var i = 0;
+//     for (i; i < 5; i++) {
+//       var computerSelection = getComputerSelection();
+//       var roundOutcome = playRound(playerSelection, computerSelection);
+//
+// //display the outcome in the console.
+//       console.log(`You threw ${playerSelection}. ` + `Computer threw ${computerSelection}. ` + roundOutcome);
+//     }
+//   }
 
 </script>
+</html>
